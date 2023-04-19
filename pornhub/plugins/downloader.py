@@ -36,10 +36,7 @@ async def run_async(func, *args, **kwargs):
 
 
 def url(filter, client, update):
-    if "www.pornhub" in update.text:
-        return True
-    else:
-        return False
+    return "www.pornhub" in update.text
 
 url_filter = filters.create(url, name="url_filter")
 
@@ -54,7 +51,7 @@ async def subscribe_channel(c: Client, u: Message):
             await c.get_chat_member(sub_chat, u.from_user.id)
         except UserNotParticipant:
             if sub_chat.isalpha():
-                url = "https://t.me/" + sub_chat
+                url = f"https://t.me/{sub_chat}"
             else:
                 chat_info = await c.get_chat(sub_chat)
                 url = chat_info.invite_link
@@ -105,14 +102,14 @@ async def inline_search(c: Client, q: InlineQuery):
 
     videos = src.videos
     await backend.close()
-    
+
 
     for vid in videos:
 
         try:
-            pornstars = ", ".join(v for v in vid.pornstars)
-            categories = ", ".join(v for v in vid.categories)
-            tags = ", #".join(v for v in vid.tags)
+            pornstars = ", ".join(vid.pornstars)
+            categories = ", ".join(vid.categories)
+            tags = ", #".join(vid.tags)
         except:
             pornstars = "N/A"
             categories = "N/A"
@@ -176,12 +173,12 @@ async def options(c: Client, m: Message):
 async def get_video(c: Client, q: CallbackQuery):
     url = q.data.split("_",1)[1]
     msg = await q.message.edit("Downloading...")
-    user_id = q.message.from_user.id
-
     if "some" in active:
         await q.message.edit("Sorry, you can only download videos at a time!")
         return
     else:
+        user_id = q.message.from_user.id
+
         active.append(user_id)
 
     ydl_opts = {

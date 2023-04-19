@@ -48,14 +48,8 @@ async def intro_msg(_, update: Message):
 
 @Client.on_message(filters.command("help", prefixs))
 async def command_list(_, update: Message):
-    text_1 = """
-🛠 Command list:
-
-» /start - start this bot
-» /help  - showing this message
-» /ping  - check bot status
-    """
-    text_2 = """
+    if update.from_user.id in sudoers:
+        text_2 = """
 🛠 Command list:
 
 » /start - start this bot
@@ -65,9 +59,15 @@ async def command_list(_, update: Message):
 » /speed - show speed
 » /gcast - broadcast message
     """
-    if update.from_user.id in sudoers:
         await update.reply_text(text_2)
     else:
+        text_1 = """
+🛠 Command list:
+
+» /start - start this bot
+» /help  - showing this message
+» /ping  - check bot status
+    """
         await update.reply_text(text_1)
 
 
